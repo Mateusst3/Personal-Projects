@@ -1,11 +1,14 @@
-import axios from "axios";
+const fetchData = async () =>{
+    const req = await fetch('http://127.0.0.1:8000')
+    const json = await req.json();
+    return json
+}
 
-const api = axios({
-    method: 'get',
-    url: "http://127.0.0.1:8000/",
-    withCredentials: false,
-});
-
-
-
-export default api;
+// eslint-disable-next-line
+export default {
+    getDataList: async() => {
+        return[
+            await fetchData()
+        ]
+    }
+}
