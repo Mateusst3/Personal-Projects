@@ -36,15 +36,16 @@ function App() {
     let json = await api.getDataList();
     setData(json)
     setIsData(true)
-    setLastDate(json[0][0].geral.data)
-    setFirstDate(json[0][json[0].length - 1].geral.data)
+    let arrFirstDate = json[0][json[0].length - 1].geral.data.split('-')
+    setFirstDate(arrFirstDate[1] + '-' + arrFirstDate[2] + '-' + arrFirstDate[0])
+    let arrLastDate = json[0][0].geral.data.split('-')
+    setLastDate(arrLastDate[1] + '-' + arrLastDate[2] + '-' + arrLastDate[0])
     }
 
     loadData();
   }, []);
 
-  function teste(){
-    console.log(data)
+  function openCalendar(){
     setClassCalendar(classCalendar === 'hide' ? 'show' : 'hide')
   }
 
@@ -98,7 +99,7 @@ function App() {
     maxDate={new Date(lastDate)}
     />
     <p>Cliente {clientValue}</p>
-    <button onClick={teste}></button>
+    <button onClick={openCalendar}><img src="https://portais.univasf.edu.br/reitoria/imagens/Calendrio.png/@@images/image.png"/></button>
     <VictoryPie data={dataChart}/>
 
     </>
