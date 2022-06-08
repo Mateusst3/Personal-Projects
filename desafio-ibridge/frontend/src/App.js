@@ -47,6 +47,7 @@ function App() {
 
   function openCalendar(){
     setClassCalendar(classCalendar === 'hide' ? 'show' : 'hide')
+    
   }
 
   function printDay(valueData){
@@ -55,6 +56,7 @@ function App() {
     let returnDate = formatedActualDate(valueData)
     data[0].forEach(function(element){
       if(element.geral.data === returnDate){
+        console.log(element)
         dataChart.push(element.clientes[clientValue].chamadas_abandono_fila)
         dataChart.push(element.clientes[clientValue].chamadas_abandono_pre_fila)
         dataChart.push(element.clientes[clientValue].chamadas_atendimento_humano)
@@ -64,6 +66,7 @@ function App() {
         dataChart.push(element.clientes[clientValue].chamadas_nao_atendida)
         dataChart.push(element.clientes[clientValue].chamadas_telefone_incorreto)
         dataChart.push(element.clientes[clientValue].chamadas_total)
+        console.log(dataChart)
       }
     })
   }
@@ -100,7 +103,11 @@ function App() {
     />
     <p>Cliente {clientValue}</p>
     <button onClick={openCalendar}><img src="https://portais.univasf.edu.br/reitoria/imagens/Calendrio.png/@@images/image.png"/></button>
-    <VictoryPie data={dataChart}/>
+    <VictoryPie data={[
+    { x: "Cats", y: 35 },
+    { x: "Dogs", y: 40 },
+    { x: "Birds", y: 55 }
+  ]}/>
 
     </>
     
