@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity(name = "usuario")
 public class UsuarioModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, length = 50)
