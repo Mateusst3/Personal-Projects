@@ -2,6 +2,7 @@ package br.com.mateus.tutorialrestapi.controller;
 
 import br.com.mateus.tutorialrestapi.model.UsuarioModel;
 import br.com.mateus.tutorialrestapi.repository.UsuarioRepository;
+import br.com.mateus.tutorialrestapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,36 +15,61 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository repository;
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @GetMapping(path = "/api/usuario/{id}")
     public ResponseEntity consultar(@PathVariable("id") Long id){
-        return repository.findById(id)
-                .map(record -> ResponseEntity.ok().body(record))
-                .orElse(ResponseEntity.notFound().build());
+        try{
+            return ResponseEntity.ok().body(usuarioService.getUsuario(id));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e);
+        }
+
     }
 
     @GetMapping(path = "/api/usuario/all")
-    public ResponseEntity<List<UsuarioModel>> consultarTodos(){
-        return ResponseEntity.ok(repository.findAll());
+    public ResponseEntity consultarTodos(){
+//        return ResponseEntity.ok(repository.findAll());
+        try{
+            return ResponseEntity.ok(usuarioService.getAllUsuarios());
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 
     @PostMapping(path = "/api/usuario/salvar")
-    public UsuarioModel salvar(@RequestBody UsuarioModel usuario){
-        return repository.save(usuario);
+    public ResponseEntity salvar(@RequestBody UsuarioModel usuario){
+        try{
+            return ResponseEntity.ok().body(usuarioService.saveUsuario(usuario));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 
     @DeleteMapping(path = "/api/usuario/deletar/{id}")
-    public ResponseEntity<List<UsuarioModel>> deletarUsuario(@PathVariable("id") Long id){
-        repository.deleteById(id);
-        return ResponseEntity.ok(repository.findAll());
+    public ResponseEntity deletarUsuario(@PathVariable("id") Long id){
+        try{
+            return ResponseEntity.ok().body(usuarioService.deleteUsuario(id));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 
     @PutMapping(path = "/api/usuario/atualizar/{id}")
-    public Optional<UsuarioModel> atualizarUsuario(@PathVariable("id") Long id, @RequestBody UsuarioModel usuario){
-//        repository.findById(id)
-//                .map(usuarioModel -> repository.save(usuario));
-        usuario.setId(id);
-        repository.save(usuario);
-        return repository.findById(id);
+    public ResponseEntity atualizarUsuario(@PathVariable("id") Long id, @RequestBody UsuarioModel usuario){
+        try {
+            return ResponseEntity.ok().body(usuarioService.updateUsuario(id, usuario));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 }
