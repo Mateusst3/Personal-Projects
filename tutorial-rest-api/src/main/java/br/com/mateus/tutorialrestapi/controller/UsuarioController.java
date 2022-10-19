@@ -13,9 +13,9 @@ import java.util.Optional;
 @RestController
 public class UsuarioController {
 
-    @Autowired
     private UsuarioRepository repository;
     private final UsuarioService usuarioService;
+
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
