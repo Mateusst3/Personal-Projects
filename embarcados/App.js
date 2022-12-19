@@ -9,29 +9,32 @@ export default function App() {
   const [response, setResponse] = useState()
   const fetchData = () => {
     const baseURL = "";
-    axios.get(`http://192.168.5.104:8080`).then((response) => setResponse(response.data));
+    axios.get(`http://localhost:8080/all`).then((response) => setResponse(response.data));
   };
 
   useEffect(() => {
-  }, setInterval(fetchData(), 1000),[])
+    
+  }, [setInterval(fetchData(), 1000)])
   if(!response){return<></>}
 
   else{
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>Distância:</Text>
-      <Text style={styles.paragraph}>{response[response.length - 1].distance} metros</Text>
+      <Text style={styles.paragraph}>{response[response.length - 1].distance} centimetros</Text>
       <Text style={styles.paragraph}>Distancias passadas:</Text>
       <div style={styles.div}>
+      <h1>
       {response.map(
         element => {
           return(
-            <Text style={styles.paragraph}>
+            <Text style={styles.text2} key={response.indexOf(element)}>
               {element.distance},
             </Text>
           )
         }
       )}
+      </h1>
       </div>
       <StatusBar style="auto" />
     </View>
@@ -45,11 +48,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'blue'
+    backgroundColor: '#ADD'
   },
   paragraph: {
     fontWeight: 'bold',
     fontSize: '50px'
+  },
+  text2: {
+    fontWeight: 'bold',
+    fontSize: '15px',
+    clear: 'both',
+    display: 'inline-block',
+    overflow: 'hidden',
+    whitespace: 'nowrap'
   },
   div: {
     display: 'flex'
