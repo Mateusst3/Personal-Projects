@@ -1,3 +1,7 @@
+#include <ESP8266HTTPClient.h>
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+
 int buzzer = 14; // set the "buzzer" variable as 14 - D5 ESP8266
 int sonar_echo = 13; // set the "sonar_echo" variable as 13 - D7 ESP8266
 int sonar_trigger = 12; // set the "sonar_trigger" variable as 12 - D6 ESP8266
@@ -9,19 +13,42 @@ const float limite3 = 10.0;
 const float limite4 = 5.0;
 
 void setup() {
+  
   Serial.begin(115200);
   pinMode(buzzer, OUTPUT);
   pinMode(sonar_trigger, OUTPUT);
   pinMode(sonar_echo, INPUT);
+  WiFi.begin("Roteador de baixo", "teixeira");   //WiFi connection
+
+  while (WiFi.status() != WL_CONNECTED) {  //Wait for the WiFI connection completion
+    delay(500);
+    Serial.println("Waiting for connection");
+  }
 }
  
 void loop() {
-  inicializarTrigger();
-  float distancia = calcularDistancia ();
+  HTTPClient http;  //Declare an object of class HTTPClient
+  WiFiClient wifiClient;
+  inicializarTrigger();                                
+  float distancia = calcularDistancia();
+  String buf;
+  buf += F("http://192.168.5.102:8080/?distance=");
+  buf += String(distancia, 6);
+    Serial.print(buf);
+  http.begin(wifiClient, buf);
+  http.addHeader("Cache-Control","no-cache");
+  int httpCode = http.POST("");
+  if (httpCode > 0) { //Check the returning code
+      String payload = http.getString();   //Get the request response payload
+      Serial.println(payload);             //Print the response payload
+  }
+  
   if (distancia < limite1){
   // Dispara os alertas
     alertas(distancia);
   }
+  http.end();
+  delay(500);
 }
 
 void alertas (float distancia){
@@ -56,7 +83,6 @@ float calcularDistancia(){
   Serial.print(distancia);
   Serial.print("cm");
   Serial.println();
-  delay(500);
   return distancia;
 }
 
@@ -66,17 +92,4 @@ void inicializarTrigger(){
   digitalWrite(sonar_trigger, HIGH);
   delayMicroseconds(10);
   digitalWrite(sonar_trigger, LOW);
-}
-
-String getPage(){
-  String page = "<html lang=en-EN><head><meta http-equiv='refresh' content='60'/>";
-  page += "<title>ESP32 WebServer - educ8s.tv</title>";
-  page += "<style> body { background-color: #fffff; font-family: Arial, Helvetica, Sans-Serif; Color: #000000; }</style>";
-  page += "</head><body><h1>ESP32 WebServer</h1>";
-  page += "<h3>BME280 Sensor</h3>";
-  page += "<ul><li>Distancia: ";
-  page += distancia;
-
-  page += "</body></html>";
-  return page;
 }
