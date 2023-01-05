@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import NewNoteButton from "./NewNote/NewNote";
 import Login from "./Login/Login";
 
 export default function MainPage() {
@@ -18,7 +19,9 @@ export default function MainPage() {
                             session?.user
                                 ?
                                 <>
-
+                                <div className="p-3">
+                                    <NewNoteButton/>
+                                </div>
                                 </>
                                 :
                                 <>

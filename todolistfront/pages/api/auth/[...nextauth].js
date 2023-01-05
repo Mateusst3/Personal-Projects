@@ -16,7 +16,7 @@ const options = {
                 password: user.id,
                 name: user.name,
               };
-            post(`user/register`, undefined, body).then(res => console.log(res))
+            post(`user/register`, undefined, body).then(res => user.id = res.id)
             return true
         }
     }
