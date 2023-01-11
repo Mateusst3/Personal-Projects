@@ -9,6 +9,5 @@ import java.util.List;
 public interface NoteRepository extends CrudRepository<Note, Integer> {
     List<Note> findAllByUserId(Integer user_id);
     void deleteAllByUserId(Integer user_id);
-
     List<Note> findAllByUserEmail(String user_email);
 }

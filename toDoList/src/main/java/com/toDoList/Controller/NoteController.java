@@ -4,11 +4,13 @@ import com.toDoList.Models.Note;
 import com.toDoList.Repository.NoteRepository;
 import com.toDoList.Service.NoteService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
 @RequestMapping("/note")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@Validated
+@RestController
 public class NoteController {
 
     private NoteRepository repository;
@@ -19,8 +21,13 @@ public class NoteController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveNote(@RequestBody Note note, @RequestParam Integer id_user){
-        return ResponseEntity.ok().body(noteService.saveNote(note, id_user));
+    public ResponseEntity<?> saveNote(@RequestBody Note note, @RequestParam String userEmail){
+        return ResponseEntity.ok().body(noteService.saveNote(note, userEmail));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateNote(@RequestParam Integer idNote){
+        return ResponseEntity.ok().body(noteService.updateNoteById(idNote));
     }
 
     @GetMapping("/get")
@@ -34,7 +41,7 @@ public class NoteController {
     }
 
     @GetMapping("/get/userEmail")
-    public ResponseEntity<?> getNotesByUserEmail(@RequestParam String user_email){
-        return ResponseEntity.ok().body(noteService.getNotesByUserEmail(user_email));
+    public ResponseEntity<?> getNotesByUserEmail(@RequestParam String userEmail){
+        return ResponseEntity.ok().body(noteService.getNotesByUserEmail(userEmail));
     }
 }

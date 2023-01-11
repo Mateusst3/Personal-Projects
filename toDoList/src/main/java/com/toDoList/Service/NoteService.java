@@ -22,9 +22,8 @@ public class NoteService {
     @Autowired
     UserRepository userRepository;
 
-    public NoteDTO saveNote(Note note, Integer id_user){
-        User user = userRepository.findById(id_user).orElse(null);
-        assert user != null;
+    public NoteDTO saveNote(Note note, String emailParam){
+        User user = userRepository.getUserByEmail(emailParam);
         note.setUser(user);
         noteRepository.save(note);
         UserDTO userDTO = new UserDTO(user);
@@ -42,6 +41,14 @@ public class NoteService {
     public List<Note> deleteNoteById(Integer id_note, Integer id_user){
         noteRepository.deleteById(id_note);
         return noteRepository.findAllByUserId(id_user);
+    }
+
+    public Note updateNoteById(Integer idNota){
+       Note note = noteRepository.findById(idNota).orElse(null);
+        assert note != null;
+        note.setStatus("done");
+        noteRepository.save(note);
+        return note;
     }
 
     public void deleteAllByUserId(Integer id_user){
