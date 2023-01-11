@@ -18,7 +18,7 @@ export default function Login() {
                         </h1>
                     </div>
                     <div>
-                        <button className="border-2 border-gray-50 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-3" onClick={() => window.location.href = window.location.href + 'api/auth/signin'}>
+                        <button className="border-2 border-gray-50 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-3" onClick={() => signOut()}>
                             Logout
                         </button>
                     </div>
@@ -26,7 +26,7 @@ export default function Login() {
             </>
             :
             <>
-                <button className="border-2 border-gray-50 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => signOut()}>
+                <button className="border-2 border-gray-50 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => window.location.href = window.location.href + 'api/auth/signin'}>
                     Login
                 </button>
             </>

@@ -1,9 +1,26 @@
 import { useSession } from "next-auth/react";
 import NewNoteButton from "./NewNote/NewNote";
 import Login from "./Login/Login";
+import { use, useEffect, useState } from "react";
+import { get } from "../pages/api/apiHandler";
+import Note from "./Note/Note";
+import { StatusEnum } from "../public/interfaces/StatusEnum";
+
 
 export default function MainPage() {
     const { data: session } = useSession()
+    const [update, setUpdate] = useState()
+    const [userNotes, setUserNotes] = useState<[] | undefined>(undefined)
+    const [charge, setCharge] = useState(5)
+    session?.user
+        ?
+        useEffect(() => {
+            get(`note/get/userEmail?userEmail=${session.user?.email}`).then((response) => setUserNotes(response))
+
+        })
+        :
+        useEffect(() => { })
+
     return (
         <>
             <div className="w-screen h-screen bg-neutral-900 flex flex-row justify-center">
@@ -19,9 +36,55 @@ export default function MainPage() {
                             session?.user
                                 ?
                                 <>
-                                <div className="p-3">
-                                    <NewNoteButton/>
-                                </div>
+                                    <div className="p-3 flex flex-row h-full">
+                                        {
+                                            userNotes
+                                                ?
+                                                <>
+
+                                                    <div className="w-1/5 h-full flex justify-center items-center border-r">
+                                                        <NewNoteButton />
+                                                    </div>
+                                                    <div className="flex items-center text-white p-3">
+                                                        {
+                                                            charge > 5
+                                                                ?
+                                                                <button onClick={() => setCharge(charge - 5)} className='h-auto border rounded'>
+                                                                    Página anterior
+                                                                </button>
+                                                                :
+                                                                <></>
+                                                        }
+
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-10 p-3 justify-center ">
+                                                        {
+                                                            userNotes.filter((element: any, index: number) => (element.status == StatusEnum.toDo)).map(
+                                                                (element: any) => {
+                                                                    return (
+                                                                        <Note id={element.id} title={element.title} content={element.content} status={element.status} setNotes={setUpdate} />
+                                                                    )
+                                                                }
+                                                            )
+                                                        }
+                                                    </div>
+                                                    {/* {
+                                                        userNotes.filter((element: any) => element.status == StatusEnum.toDo).length >= 5
+                                                            ?
+                                                            <div className="flex items-center text-white">
+                                                                <button onClick={() => setCharge(charge + 5)} className='h-auto border rounded'>
+                                                                    Próxima página
+                                                                </button>
+                                                            </div>
+                                                            :
+                                                            <></>
+                                                    } */}
+
+                                                </>
+                                                :
+                                                <></>
+                                        }
+                                    </div>
                                 </>
                                 :
                                 <>

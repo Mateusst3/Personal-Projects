@@ -9,17 +9,6 @@ const options = {
             clientSecret: process.env.GITHUB_CLIENT_SECRET
         }),
     ],
-    callbacks:{
-        async signIn({user}) {
-            let body = {
-                email: user.email,
-                password: user.id,
-                name: user.name,
-              };
-            post(`user/register`, undefined, body).then(res => user.id = res.id)
-            return true
-        }
-    }
 }
 
 export default (req, res) => NextAuth(req, res, options)
