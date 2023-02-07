@@ -1,8 +1,8 @@
-const url = "localhost"
-const routesApiURL: string = `${url}:8080`;
-const megajogosApiSecret: string = process.env.MEGAJOGOS_API_SECRET || 'Ap1S3crEt';
+const url = "todolistbackend-production.up.railway.app/"
+const routesApiURL: string = `${url}`;
+const megajogosApiSecret: string = process.env.MEGAJOGOS_API_SECRET || '';
 
-const base = `http://${routesApiURL}`;
+const base = `https://${routesApiURL}`;
 
 async function send(method: string, path: string, token: string =megajogosApiSecret, data? : any) {
     let opts: any = { method, headers: {} };
